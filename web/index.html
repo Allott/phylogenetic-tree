@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Dan Testing">
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> <style> #myEmbeddedScene { width:600px; height:300px; } </style>
+    <script src="https://unpkg.com/aframe-line-component/dist/aframe-line-component.min.js"></script><!--https://www.npmjs.com/package/aframe-line-component-->
+    <script src="jsfile.js" defer></script>
+    <script>
+      AFRAME.registerComponent('node', {
+        init: function () {
+          var el = this.el
+          var info = el.getAttribute("value")
+          var textbox = document.querySelector('#text-container')
+          
+          el.addEventListener('mouseenter', function () {
+             el.setAttribute('color', '#24CAFF')
+          })
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('color', '#EF2D5E')
+          })
+          el.addEventListener('click', function () {
+            el.setAttribute('color', '#00B705')
+            textbox.setAttribute('value', info)
+          })
+        }})
+      
+      AFRAME.registerComponent('mode-button', {
+        init: function () {
+          var el = this.el
+          var state = true
+          var world = document.querySelector('#tree-container')
+          
+          el.addEventListener('mouseenter', function () {
+             if (state){
+               el.setAttribute('color', '#cca300')
+             } else {
+               el.setAttribute('color', '#ff9933')
+             }
+          })
+          el.addEventListener('mouseleave', function () {
+            if (state){
+              el.setAttribute('color', '#b38f00')
+            } else {
+              el.setAttribute('color', '#ff8c1a')
+            }
+            
+          })
+          el.addEventListener('click', function () {
+            if (state){
+              el.setAttribute('color', '#ff9933')
+              state = false
+              world.setAttribute('scale', '0.01 0.01 0.01')
+              world.setAttribute('position', '0 1.5 0')
+              
+            } else {
+              el.setAttribute('color', '#cca300')
+              state = true
+              world.setAttribute('scale', '1 1 1')
+              world.setAttribute('position', '0 0 0')
+            }
+            })
+        }})
+      
+      AFRAME.registerComponent('rotate-button', {
+        schema: {
+          xr: {type: 'number', default: 0},
+          yr: {type: 'number', default: 0},
+          zr: {type: 'number', default: 0}
+        },
+        init: function () {
+          var el = this.el
+          var data = this.data
+          var world = document.querySelector('#tree-container')
+          
+          el.addEventListener('mouseenter', function () {
+             el.setAttribute('color', '#24CAFF')
+          })
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('color', '#EF2D5E')
+          })
+          el.addEventListener('click', function () {
+            el.setAttribute('color', '#00B705')
+            world.object3D.rotation.x += Math.PI * data.xr
+            world.object3D.rotation.y += Math.PI * data.yr
+            world.object3D.rotation.z += Math.PI * data.zr
+          })
+  }
+})
+      
+    </script>
+  </head>
+  <body>
+    <button type="button" onclick="toggle()" id="button">Unused</button>
+    <textarea rows="3" cols="10" id="input"></textarea>
+      <div id="myEmbeddedScene">
+        <a-scene background="color: #190049" embedded>
+          
+          <a-entity id="camera-container" rotation="0 -90 0">
+            <a-camera>
+              <a-cursor></a-cursor>
+            </a-camera>
+          <a-entity vive-focus-controls laser-controls></a-entity>
+          </a-entity>
+
+          <a-entity id="interface-container">
+            <a-text id="text-container" value="nothing selected" position="1 1.5 0" rotation="0 270 0" width="2" color="black"></a-text>
+            <a-box position="0 0.3 0" rotation="0 0 0" material="color: #b3b3b3; transparent: true; opacity: 0.5" width="2" depth="2" shadow></a-box>
+            <a-box position="1.05 0.3 0" rotation="0 0 0" material="color: #b3b3b3; transparent: true; opacity: 0.5"width="0.1" depth="2" height="3" shadow></a-box>
+            <a-box position="1 1.5 -0.3" rotation="0 0 0" color="#b38f00" width="0.1" depth="0.1" height="0.1" shadow mode-button></a-box>
+            <a-entity id="rotation-button-container" position="1 1.3 -0.6">
+              <a-box position="0 0 0.1" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="yr: 0.02"></a-box>
+              <a-box position="0 0 -0.1" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="yr: -0.02"></a-box>
+              <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="zr: 0.02"></a-box>
+              <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="zr: -0.02"></a-box>
+            </a-entity>
+          </a-entity>
+          
+          <a-entity id="tree-container"></a-entity>
+          
+        </a-scene>
+      </div>
+  </body>
+</html>
