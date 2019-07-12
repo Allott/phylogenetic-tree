@@ -8,5 +8,11 @@ namespace TreeHandler
 {
     class Tree
     {
+        public Node root;
+
+        public Tree()
+        {
+
+        }
     }
 }
