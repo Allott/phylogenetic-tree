@@ -1,0 +1,21 @@
+{
+  "name":"tree name",
+  "length":15,
+  "nodes":[
+     {"position":"38 -24 -47","colour":"#F41FB5","text":"Node: 1","parentID":0},
+     {"position":"49 22 37","colour":"#76C180","text":"Node: 2","parentID":0},
+     {"position":"15 13 -13","colour":"#091561","text":"Node: 3","parentID":1},
+     {"position":"-40 10 21","colour":"#B3BDBB","text":"Node: 4","parentID":2},
+     {"position":"48 28 17","colour":"#D7D646","text":"Node: 5","parentID":3},
+     {"position":"-20 -30 -11","colour":"#732C2B","text":"Node: 6","parentID":4},
+     {"position":"-43 -2 -32","colour":"#F3077C","text":"Node: 7","parentID":5},
+     {"position":"40 -6 30","colour":"#A020B3","text":"Node: 8","parentID":6},
+     {"position":"-23 -29 -7","colour":"#3E54AB","text":"Node: 9","parentID":7},
+     {"position":"-39 44 -33","colour":"#9D2CD8","text":"Node: 10","parentID":8},
+     {"position":"43 32 24","colour":"#1CA564","text":"Node: 11","parentID":9},
+     {"position":"-7 -28 31","colour":"#1CF1BC","text":"Node: 12","parentID":10},
+     {"position":"40 -5 13","colour":"#0B12D3","text":"Node: 13","parentID":11},
+     {"position":"-36 -50 15","colour":"#E98CCE","text":"Node: 14","parentID":12},
+     {"position":"37 -42 -11","colour":"#AF56DA","text":"Node: 15","parentID":13}
+  ]
+}
