@@ -8,23 +8,24 @@ namespace TreeHandler
 {
     class Node
     {
-        public H3Layout position;
+        public H3Layout position = new H3Layout();
         public Node parent;
         public LinkedList<Node> children = new LinkedList<Node>();
         public string name;
         public double distance;//distance to parent
         public int depth;
+        public string colour = "#F41FB5";
 
         public Node()//root
         {
             parent = null;
             name = "root";
             depth = 0;
+            parent = this;
         }
 
-        public Node(H3Layout pos, Node par)
+        public Node(Node par)
         {
-            position = pos;
             parent = par;
             name = "";
             depth = par.depth + 1;
@@ -34,18 +35,16 @@ namespace TreeHandler
         public string Print()
         {
             string returnstring = "";
-            for (int i = 0; i < depth; i++)
-            {
-                returnstring += "-";
-            }
-
-            returnstring += "name[" + name + 
-                "] distance[" + distance + "]";
-            foreach (Node n in children)
-            {
-                returnstring += "\r\n";
-                returnstring += n.Print();
-            }
+            returnstring += @"{""position"":""";
+            returnstring += position.GetCartisianPosition();
+            returnstring += @""",""colour"":""";
+            returnstring += colour;
+            returnstring += @""",""text"":""";
+            returnstring += name;
+            returnstring += @""",""parentIDFix"":""";
+            returnstring += depth;
+            //returnstring += parent.name;
+            //returnstring += @"""}";
             return returnstring;
         }
     }
