@@ -8,10 +8,11 @@ namespace TreeHandler
 {
     class H3Layout
     {
-        public int x;//co-ordinates is cartisian space
-        public int y;
-        public int z;
+        public double x;//co-ordinates is cartisian space
+        public double y;
+        public double z;
 
+        public double r = 0;
 
         public H3Layout()
         {

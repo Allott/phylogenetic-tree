@@ -71,12 +71,27 @@ namespace TreeHandler
 
         public void BottomUpPass()//find an approximate radius for each hemisphere
         {
-            
+            for (int i = nodeList.Count - 1; i > 0; i--)//messy
+            {
+                if (nodeList[i].children.Count == 0)
+                {
+                    nodeList[i].position.r = 1;
+                }
+                nodeList[i].parent.position.r += nodeList[i].position.r;
+            }
         }
 
         public void TopDownPass()//place children on the surface of their parent hemisphere
         {
+            foreach (Node n in nodeList)//assuming biggest is at the top
+            {
+                if (n.children.Count() != 0)
+                {
+                    List<Node> orderedC = n.children.OrderBy(x => x.position.r).ToList();//list of children by "radius"
 
+                    //sphere packing
+                }
+            }
         }
     }
 }

@@ -19,7 +19,8 @@ namespace TreeHandler
 
             //test 2
             Tree rtree = n.Read(newick);
-            rtree.SortList();
+            rtree.LayoutPosition();
+
             Console.Write(rtree.Print());
         }
     }
