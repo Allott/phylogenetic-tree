@@ -10,18 +10,19 @@ namespace TreeHandler
     {
         public H3Layout position = new H3Layout();
         public Node parent;
-        public LinkedList<Node> children = new LinkedList<Node>();
+        public List<Node> children = new List<Node>();
         public string name;
-        public double distance;//distance to parent
         public int depth;
         public string colour = "#F41FB5";
+        public int listid = 0;
 
         public Node()//root
         {
             parent = null;
             name = "root";
             depth = 0;
-            parent = this;
+            parent = null;
+            position.normal.Y = 1;
         }
 
         public Node(Node par)
@@ -29,7 +30,7 @@ namespace TreeHandler
             parent = par;
             name = "";
             depth = par.depth + 1;
-            par.children.AddLast(this);
+            par.children.Add(this);
         }
 
         public string Print()
@@ -41,10 +42,9 @@ namespace TreeHandler
             returnstring += colour;
             returnstring += @""",""text"":""";
             returnstring += name;
-            returnstring += @""",""parentIDFix"":""";
-            returnstring += depth;
-            //returnstring += parent.name;
-            //returnstring += @"""}";
+            returnstring += @""",""parentID"":""";
+            returnstring += listid;
+            returnstring += @"""}";
             return returnstring;
         }
     }
