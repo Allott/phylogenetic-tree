@@ -24,7 +24,7 @@ namespace TreeHandler
             return n;
         }
 
-        public Node AddLeaf(Node par,string s)
+        public Node AddLeaf(Node par, string s)
         {
             Node n = new Node(par);
             //n.SetName(s);
@@ -42,7 +42,7 @@ namespace TreeHandler
             string returnstring = "{\r\n  ";
             returnstring += @"""name"":""tree name"",";
             returnstring += "\r\n  ";
-            returnstring += @"""length"":15,";
+            returnstring += @"""length"":" + nodeList.Count + ",";
             returnstring += "\r\n  ";
             returnstring += @"""nodes"":[";
 
@@ -56,10 +56,10 @@ namespace TreeHandler
 
             foreach (Node n in nodeList)//fix parent ID system
             {
-                
+
                 returnstring += ",\r\n     ";
                 returnstring += n.Print();
-                
+
             }
             returnstring += "\r\n   ]\r\n  }";
             return returnstring;
@@ -99,41 +99,30 @@ namespace TreeHandler
                     List<Node> orderedC = n.children.OrderBy(x => x.position.r).ToList();//list of children by "radius"
                     double angle1 = 0;//z rotation
                     double angle2 = 0;//y rotation
-                    double width = 0;
-                    double preW; 
 
                     orderedC[0].position.MovePosition(n.position, 0, 0);// place first node at top of hemisphere
-
-                    preW = orderedC[1].position.r;
-                    width = orderedC[0].position.r + preW;
-                    angle1 = Math.Asin((width / 2) / n.position.r) * 2;
-
+                    angle1 = calculateAngle(n.position.r, orderedC[0].position.r, orderedC[0].position.r, 1);
 
                     for (int i = 1; i < orderedC.Count; i++)
                     {
-                        double ang = (orderedC[i - 1].position.r + orderedC[i].position.r)/2;
-                        ang = Math.Asin(ang / n.position.r) * 2;
-                        angle2 += ang;
-                        if (angle2 > 2*Math.PI)//reset angles
+
+                        angle2 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i-1].position.r, 1);
+                        if (angle2 > 2 * Math.PI)//reset angles
                         {
-                            ang = (orderedC[i - 1].position.r + orderedC[i].position.r) / 2;
-                            ang = Math.Asin(ang / n.position.r) * 2;
-                            angle2 += ang;
-
-                            angle1 += Math.Asin(((preW + orderedC[i].position.r) / 2) / n.position.r) * 2;//check this
-
-                            preW = orderedC[i].position.r;
+                            angle2 = calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i - 1].position.r, 1);
+                            angle1 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[0].position.r, 1);
                         }
-                        orderedC[i].position.MovePosition(n.position, (float) angle1, (float) angle2);
+                        orderedC[i].position.MovePosition(n.position, (float)angle1, (float)angle2);
                     }
-
-
-
-
-
-                    //sphere packing
                 }
             }
+        }
+
+        public double calculateAngle(double r, double w1, double w2, double m)
+        {
+            double w3 = w1 + w2;
+            w3 = w3 * Math.PI;
+            return 2 * Math.Asin(w3 / r) * m;
         }
     }
 }

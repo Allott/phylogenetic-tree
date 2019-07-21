@@ -19,12 +19,12 @@ namespace TreeHandler
 
 
             Tree gentree = new Tree();
-            snake(gentree, gentree.root, 5);
+            snake(gentree, gentree.root, 10);
 
             Random r = new Random();
             foreach (Node no in gentree.nodeList)
             {
-                no.position.d = r.Next(10);
+                no.position.d = r.Next(10) + 1;
             }
 
             gentree.LayoutPosition();
@@ -36,7 +36,7 @@ namespace TreeHandler
             i--;
             if (i>0)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     g.AddNode(n);
                     snake(g, n.children[j], i);
