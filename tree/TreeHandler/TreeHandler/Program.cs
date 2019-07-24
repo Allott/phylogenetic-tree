@@ -19,29 +19,22 @@ namespace TreeHandler
 
 
             Tree gentree = new Tree();
-            snake(gentree, gentree.root, 4);
 
-            Random r = new Random();
-            foreach (Node no in gentree.nodeList)
+            for (int i = 0; i < 5; i++)
             {
-                no.position.d = r.Next(10) + 1;
+                gentree.AddNode(gentree.root);
+            }
+
+            foreach (Node nc in gentree.root.children)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    gentree.AddNode(nc);
+                }
             }
 
             gentree.LayoutPosition();
             Console.Write(gentree.Print());
-        }
-
-        static void snake(Tree g, Node n, int i)
-        {
-            i--;
-            if (i>0)
-            {
-                for (int j = 0; j < 10; j++)
-                {
-                    g.AddNode(n);
-                    snake(g, n.children[j], i);
-                }
-            }
         }
     }
 }

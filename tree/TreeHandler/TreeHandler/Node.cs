@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace TreeHandler
 {
     class Node
     {
-        public H3Layout position = new H3Layout();
+
+        
         public Node parent;
         public List<Node> children = new List<Node>();
         public string name;
-        public int depth;
         public string colour = "#F41FB5";
         public int listid = 0;
+        public double distance;
+        
+        public Vector3 normal;
+        public Vector3 position;
+        public double radius;
+        public double area;
+        public int depth;
+        public int size;
+
 
         public Node()//root
         {
@@ -22,7 +32,7 @@ namespace TreeHandler
             name = "root";
             depth = 0;
             parent = null;
-            position.normal.Y = 1;
+            normal.Y = 1;
         }
 
         public Node(Node par)
@@ -37,7 +47,11 @@ namespace TreeHandler
         {
             string returnstring = "";
             returnstring += @"{""position"":""";
-            returnstring += position.GetCartisianPosition();
+
+            H3Layout h3 = new H3Layout();
+
+            returnstring += h3.GetCartisianPosition(position);
+
             returnstring += @""",""colour"":""";
             returnstring += colour;
             returnstring += @""",""text"":""";

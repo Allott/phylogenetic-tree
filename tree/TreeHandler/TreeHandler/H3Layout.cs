@@ -10,27 +10,48 @@ namespace TreeHandler
 {
     class H3Layout
     {
-        public Vector3 position;
 
-        public int r = 0;//size (rename)
-        public float d; //distance to parent
-        public Vector3 normal;
-
-        int f = 0;
-
+        const double k = 2;
 
         public H3Layout()
         {
 
         }
 
-        public string GetCartisianPosition()
+        public string GetCartisianPosition(Vector3 p)//used for printing i guess
         {
-            return position.X*10 + " " + position.Y*10 + " " + position.Z*10;
+            return p.X*10 + " " + p.Y*10 + " " + p.Z*10;
         }
+
+        public double CalcRadius(double i)//check this
+        {
+            double x = Math.Sqrt(i / (2 * Math.PI * k * k));
+
+            //Inverse Hyperbolic Sine HArcsin(X) = Log(X + Sqr(X * X + 1)) 
+            return k * Math.Log(x + Math.Sqrt(x * x + 1));
+        }
+
+        public double CalcHArea(double i)
+        {
+            double beta = 1.00;//?
+            return 2 * Math.PI * (Math.Cosh(i / k) - 1.0) * beta;
+        }
+
+        public double CalcChangePhi(double rp, double r1)
+        {
+            return Math.Atan((r1 / k)/Math.Sinh(rp/k));
+        }
+
+        public double CalcChangeTheta(double rp, double r1, double phi)
+        {
+            return Math.Atan(Math.Tanh(r1 / k) /
+                (Math.Sinh(rp / k) * Math.Sinh(phi)));
+        }
+
 
         public void MovePosition(H3Layout parent, float a1, float a2)
         {
+            /*
             f = 1;
             Matrix4x4 m1 = new Matrix4x4(
                 (float) Math.Cos(a1), (float) -Math.Sin(a1), 0, 0,
@@ -51,12 +72,7 @@ namespace TreeHandler
             //normal = Vector3.Transform(normal, m2);
 
             position = parent.position + Vector3.Multiply(d, normal);
-
-            //to do
-            //test this quickly
-            //normaltranform?
-            //circle layout
-
+            */
 
         }
 

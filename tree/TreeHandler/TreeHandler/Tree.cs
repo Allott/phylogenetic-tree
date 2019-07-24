@@ -10,6 +10,7 @@ namespace TreeHandler
     {
         public Node root;
         public List<Node> nodeList = new List<Node>();
+        H3Layout h3 = new H3Layout();
 
         public Tree()
         {
@@ -20,14 +21,6 @@ namespace TreeHandler
         public Node AddNode(Node par)
         {
             Node n = new Node(par);
-            nodeList.Add(n);
-            return n;
-        }
-
-        public Node AddLeaf(Node par, string s)
-        {
-            Node n = new Node(par);
-            //n.SetName(s);
             nodeList.Add(n);
             return n;
         }
@@ -67,7 +60,7 @@ namespace TreeHandler
 
         public void LayoutPosition()
         {
-            SortList();
+            SortList();//fix depth
             BottomUpPass();
             TopDownPass();
         }
@@ -80,45 +73,62 @@ namespace TreeHandler
 
         public void BottomUpPass()//find an approximate radius for each hemisphere
         {
-            for (int i = nodeList.Count - 1; i > 0; i--)//messy
+            for (int i = nodeList.Count - 1; i > -1; i--)//messy
             {
-                if (nodeList[i].children.Count == 0)
+                if (nodeList[i].children.Count == 0)//leaf node
                 {
-                    nodeList[i].position.r = 1;
+                    nodeList[i].radius = h3.CalcRadius(0.0025);
                 }
-                nodeList[i].parent.position.r += nodeList[i].position.r;
+                else
+                {
+                    double r = 0;
+                    int s = 0;
+                    foreach (Node n in nodeList[i].children)
+                    {
+                        r += 7.2 * h3.CalcHArea(n.radius);//why 7.2?
+                        s += 1;
+                        if (n.children.Count != 0)
+                        {
+                            s += n.size;
+                        }
+                    }
+                    nodeList[i].radius = h3.CalcRadius(r);
+                    nodeList[i].size = s;
+                }
             }
         }
-
         public void TopDownPass()//place children on the surface of their parent hemisphere
         {
-            foreach (Node n in nodeList)//assuming biggest is at the top
+            foreach (Node np in nodeList)
             {
-                if ((n.children.Count() != 0))
+                if (np.children.Count != 0)
                 {
-                    List<Node> orderedC = n.children.OrderBy(x => x.position.r).ToList();//list of children by "radius"
-                    double angle1 = 0;//z rotation
-                    double angle2 = 0;//y rotation
+                    double anglePhi = 0; // hemishpere angle
+                    double angleTheta = 0; //rotation angle
+                    double rp = np.radius;
+                    double maxPhi = 0;
+                    //place/store node 1
 
-                    orderedC[0].position.MovePosition(n.position, 0, 0);// place first node at top of hemisphere
-                    //angle1 = calculateAngle(n.position.r, orderedC[0].position.r, orderedC[0].position.r, 1);
+                    anglePhi += h3.CalcChangePhi(rp, np.children[0].radius);
 
-                    float jar = orderedC[0].position.r;
-
-                    for (int i = 1; i < orderedC.Count; i++)
+                    for (int i = 1; i < np.children.Count; i++)
                     {
-
-                        //angle2 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i-1].position.r, 1);
-                        if (angle2 > 2 * Math.PI)//reset angles
+                        double changeTheta = h3.CalcChangeTheta(rp, np.children[i].radius, anglePhi);
+                        if (angleTheta + changeTheta <= Math.PI*2)
                         {
-                           // angle2 = calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i - 1].position.r, 1);
-                            //angle1 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[0].position.r, 1);
+                            angleTheta += changeTheta;
+                            if (h3.CalcChangePhi(rp, np.children[i].radius) > maxPhi)
+                            {
+                                maxPhi = h3.CalcChangePhi(rp, np.children[i].radius);
+                            }
                         }
-                        //orderedC[i].position.MovePosition(n.position, (float)angle1, (float)angle2);
-                        jar += orderedC[i].position.r;
-                        float jar2 = jar / n.position.r;
-                        orderedC[i].position.MovePosition(n.position, (float) ((jar/n.position.r)*1.4), (float) ((jar / n.position.r)*4*Math.PI));
+                        else//reset new band
+                        {
+                            angleTheta = changeTheta;
+                            anglePhi += maxPhi;
+                        }
 
+                        //place/store
                     }
                 }
             }
@@ -130,5 +140,6 @@ namespace TreeHandler
             w3 = w3 * Math.PI;
             return 2 * Math.Asin(w3 / r) * m;
         }
+
     }
 }

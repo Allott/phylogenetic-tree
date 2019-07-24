@@ -54,7 +54,7 @@ namespace TreeHandler
             if (parts.Length == 2)
             {
                 current.name = parts[0];
-                current.position.d = (float) Convert.ToDouble(parts[1]);//hmmm think about types more
+                current.distance = (float) Convert.ToDouble(parts[1]);//hmmm think about types more
             }
             else
             {
