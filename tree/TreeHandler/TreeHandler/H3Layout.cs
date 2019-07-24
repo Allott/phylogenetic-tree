@@ -47,7 +47,7 @@ namespace TreeHandler
             Matrix4x4 m3 = m1 * m2;
 
 
-            normal = Vector3.Transform(parent.normal, m3);
+            normal = Vector3.TransformNormal(parent.normal, m3);
             //normal = Vector3.Transform(normal, m2);
 
             position = parent.position + Vector3.Multiply(d, normal);

@@ -101,24 +101,30 @@ namespace TreeHandler
                     double angle2 = 0;//y rotation
 
                     orderedC[0].position.MovePosition(n.position, 0, 0);// place first node at top of hemisphere
-                    angle1 = calculateAngle(n.position.r, orderedC[0].position.r, orderedC[0].position.r, 1);
+                    //angle1 = calculateAngle(n.position.r, orderedC[0].position.r, orderedC[0].position.r, 1);
+
+                    float jar = orderedC[0].position.r;
 
                     for (int i = 1; i < orderedC.Count; i++)
                     {
 
-                        angle2 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i-1].position.r, 1);
+                        //angle2 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i-1].position.r, 1);
                         if (angle2 > 2 * Math.PI)//reset angles
                         {
-                            angle2 = calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i - 1].position.r, 1);
-                            angle1 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[0].position.r, 1);
+                           // angle2 = calculateAngle(n.position.r, orderedC[i].position.r, orderedC[i - 1].position.r, 1);
+                            //angle1 += calculateAngle(n.position.r, orderedC[i].position.r, orderedC[0].position.r, 1);
                         }
-                        orderedC[i].position.MovePosition(n.position, (float)angle1, (float)angle2);
+                        //orderedC[i].position.MovePosition(n.position, (float)angle1, (float)angle2);
+                        jar += orderedC[i].position.r;
+                        float jar2 = jar / n.position.r;
+                        orderedC[i].position.MovePosition(n.position, (float) ((jar/n.position.r)*1.4), (float) ((jar / n.position.r)*4*Math.PI));
+
                     }
                 }
             }
         }
 
-        public double calculateAngle(double r, double w1, double w2, double m)
+        public double calculateAngle(double r, double w1, double w2, double m)//fix this
         {
             double w3 = w1 + w2;
             w3 = w3 * Math.PI;

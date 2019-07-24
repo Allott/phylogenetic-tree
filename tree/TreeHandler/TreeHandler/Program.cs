@@ -19,7 +19,7 @@ namespace TreeHandler
 
 
             Tree gentree = new Tree();
-            snake(gentree, gentree.root, 10);
+            snake(gentree, gentree.root, 4);
 
             Random r = new Random();
             foreach (Node no in gentree.nodeList)
@@ -36,7 +36,7 @@ namespace TreeHandler
             i--;
             if (i>0)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     g.AddNode(n);
                     snake(g, n.children[j], i);
