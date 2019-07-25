@@ -61,15 +61,24 @@ namespace TreeHandler
 
         public void LayoutPosition()
         {
-            SortList();//fix depth
+            SortByDepth();
             BottomUpPass();
+            SortBySize();
             TopDownPass();
             ColourByDepth();
         }
 
-        public void SortList()//sort list by depth for Bottom Up and Top Down Passes
+        public void SortByDepth()//sort list by depth for Bottom Up and Top Down Passes
         {
             nodeList = nodeList.OrderBy(x => x.depth).ToList();
+        }
+
+        public void SortBySize()//sort child lists by their sizes
+        {
+            foreach (Node n in nodeList)
+            {
+                n.children = n.children.OrderByDescending(x => x.size).ToList();
+            }
         }
 
 
@@ -110,8 +119,9 @@ namespace TreeHandler
                     double rp = np.radius;
                     double maxPhi = 0;
 
-                    //place/store node 1
-                    h3.MovePosition(np.children[0], 0, 0);
+                    np.children[0].phi = 0;
+                    np.children[0].theta = 0;
+                    h3.SphereToCartisian(np.children[0]);
 
 
                     anglePhi += h3.CalcChangePhi(rp, np.children[0].radius);
@@ -119,6 +129,7 @@ namespace TreeHandler
                     for (int i = 1; i < np.children.Count; i++)
                     {
                         double changeTheta = h3.CalcChangeTheta(rp, np.children[i].radius, anglePhi);
+
                         if (angleTheta + changeTheta <= Math.PI*2)
                         {
                             angleTheta += changeTheta;
@@ -133,7 +144,9 @@ namespace TreeHandler
                             anglePhi += maxPhi;
                         }
 
-                        h3.MovePosition(np.children[i], (float) anglePhi, (float) angleTheta);
+                        np.children[i].phi = anglePhi;
+                        np.children[i].theta = angleTheta;
+                        h3.SphereToCartisian(np.children[i]);
                     }
                 }
             }

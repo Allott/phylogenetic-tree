@@ -19,22 +19,45 @@ namespace TreeHandler
 
 
             Tree gentree = new Tree();
+            Random r = new Random();
 
-            for (int i = 0; i < 5; i++)
+            
+            for (int i = 0; i < 20; i++)
             {
                 gentree.AddNode(gentree.root);
             }
 
             foreach (Node nc in gentree.root.children)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < r.Next(0,50); i++)
+                {
+                    gentree.AddNode(nc);
+                }
+
+                foreach (Node nd in nc.children)
+                {
+                    for (int i = 0; i < r.Next(0, 10); i++)
+                    {
+                        gentree.AddNode(nd);
+                    }
+                }
+            }
+
+            for (int i = 0; i < 40; i++)
+            {
+                gentree.AddNode(gentree.root);
+            }
+
+            foreach (Node nc in gentree.root.children)
+            {
+                for (int i = 0; i < r.Next(0, 50); i++)
                 {
                     gentree.AddNode(nc);
                 }
             }
 
-            gentree.LayoutPosition();
+                gentree.LayoutPosition();
             Console.Write(gentree.Print());
-        }
+            }
     }
 }

@@ -18,13 +18,14 @@ namespace TreeHandler
         public int listid = 0;
         public double distance;
         
-        public Vector3 normal;
-        public Vector3 position;
+        public Vector4 position;
+        public double phi;
+        public double theta;
         public double radius;
         public double area;
         public int depth;
         public int size;
-
+        public Matrix4x4 m;
 
         public Node()//root
         {
@@ -32,7 +33,7 @@ namespace TreeHandler
             name = "root";
             depth = 0;
             parent = null;
-            normal.Y = 1;
+            position = new Vector4(0);
         }
 
         public Node(Node par)
@@ -50,7 +51,7 @@ namespace TreeHandler
 
             H3Layout h3 = new H3Layout();
 
-            returnstring += h3.GetCartisianPosition(position);
+            returnstring += h3.GetStringCoords(position);
 
             returnstring += @""",""colour"":""";
             returnstring += colour;
