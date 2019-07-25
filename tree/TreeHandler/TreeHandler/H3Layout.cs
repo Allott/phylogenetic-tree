@@ -20,7 +20,7 @@ namespace TreeHandler
 
         public string GetCartisianPosition(Vector3 p)//used for printing i guess
         {
-            return p.X*10 + " " + p.Y*10 + " " + p.Z*10;
+            return p.X*1000 + " " + p.Y*1000 + " " + p.Z*1000;
         }
 
         public double CalcRadius(double i)//check this
@@ -49,10 +49,8 @@ namespace TreeHandler
         }
 
 
-        public void MovePosition(H3Layout parent, float a1, float a2)
+        public void MovePosition(Node self, float a1, float a2)
         {
-            /*
-            f = 1;
             Matrix4x4 m1 = new Matrix4x4(
                 (float) Math.Cos(a1), (float) -Math.Sin(a1), 0, 0,
                 (float) Math.Sin(a1), (float) Math.Cos(a1), 0, 0,
@@ -68,11 +66,11 @@ namespace TreeHandler
             Matrix4x4 m3 = m1 * m2;
 
 
-            normal = Vector3.TransformNormal(parent.normal, m3);
+            self.normal = Vector3.TransformNormal(self.parent.normal, m3);
             //normal = Vector3.Transform(normal, m2);
 
-            position = parent.position + Vector3.Multiply(d, normal);
-            */
+            self.position = self.parent.position + Vector3.Multiply((float) self.radius, self.normal);
+            
 
         }
 

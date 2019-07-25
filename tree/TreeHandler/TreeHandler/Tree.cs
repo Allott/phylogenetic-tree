@@ -11,6 +11,7 @@ namespace TreeHandler
         public Node root;
         public List<Node> nodeList = new List<Node>();
         H3Layout h3 = new H3Layout();
+        string[] colours = new string[] { "#FF0000", "#FF8700", "#FFFF00", "#49FF00", "#00FFB6", "#008BFF", "#0008FF", "#7400FF", "#FF00FB" };
 
         public Tree()
         {
@@ -63,6 +64,7 @@ namespace TreeHandler
             SortList();//fix depth
             BottomUpPass();
             TopDownPass();
+            ColourByDepth();
         }
 
         public void SortList()//sort list by depth for Bottom Up and Top Down Passes
@@ -107,7 +109,10 @@ namespace TreeHandler
                     double angleTheta = 0; //rotation angle
                     double rp = np.radius;
                     double maxPhi = 0;
+
                     //place/store node 1
+                    h3.MovePosition(np.children[0], 0, 0);
+
 
                     anglePhi += h3.CalcChangePhi(rp, np.children[0].radius);
 
@@ -128,9 +133,17 @@ namespace TreeHandler
                             anglePhi += maxPhi;
                         }
 
-                        //place/store
+                        h3.MovePosition(np.children[i], (float) anglePhi, (float) angleTheta);
                     }
                 }
+            }
+        }
+
+        public void ColourByDepth()
+        {
+            foreach (Node n in nodeList)
+            {
+                n.colour = colours[n.depth%colours.Length];
             }
         }
 
