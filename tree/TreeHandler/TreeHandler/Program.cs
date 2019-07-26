@@ -36,7 +36,7 @@ namespace TreeHandler
 
                 foreach (Node nd in nc.children)
                 {
-                    for (int i = 0; i < r.Next(0, 10); i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         gentree.AddNode(nd);
                     }
