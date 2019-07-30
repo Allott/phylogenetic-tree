@@ -9,9 +9,10 @@ namespace TreeHandler
     class Tree
     {
         public Node root;
+        public string name;
         public List<Node> nodeList = new List<Node>();
         H3Layout h3 = new H3Layout();
-        string[] colours = new string[] { "#FF0000", "#FF8700", "#FFFF00", "#49FF00", "#00FFB6", "#008BFF", "#0008FF", "#7400FF", "#FF00FB" };
+        string[] colours = new string[] {"#FFFFFF", "#FF0000", "#FF8700", "#FFFF00", "#49FF00", "#00FFB6", "#008BFF", "#0008FF", "#7400FF", "#FF00FB" };
 
         public Tree()
         {
@@ -33,8 +34,20 @@ namespace TreeHandler
 
         public string Print()
         {
+            double range = -1; ;
+
+            foreach (Node n in nodeList)
+            {
+                if (n.position.Z > range)
+                {
+                    range = n.position.Z;
+                }
+            }
+
             string returnstring = "{\r\n  ";
-            returnstring += @"""name"":""tree name"",";
+            returnstring += @"""name"":""" + name + @""",";
+            returnstring += "\r\n  ";
+            returnstring += @"""range"":""" + range*1000 + @""",";
             returnstring += "\r\n  ";
             returnstring += @"""length"":" + nodeList.Count + ",";
             returnstring += "\r\n  ";
@@ -47,12 +60,21 @@ namespace TreeHandler
                     c.listid = i;
                 }
             }
-
+            bool com = true;//for placing , after each node
             foreach (Node n in nodeList)//fix parent ID system
             {
+                if (com)
+                {
+                    com = false;
+                }
+                else
+                {
+                    returnstring += ",";
+                }
 
-                returnstring += ",\r\n     ";
-                returnstring += n.Print();
+                returnstring += "\r\n     ";
+                returnstring += n.Print(range);
+
 
             }
             returnstring += "\r\n   ]\r\n  }";

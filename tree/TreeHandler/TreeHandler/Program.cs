@@ -10,53 +10,30 @@ namespace TreeHandler
     class Program
     {
         static void Main(string[] args)
-        {//
+        {
             string newick = "(((A:0.2, B:0.3)LA:0.3,(C:0.5, D:0.3)LB:0.2)LD:0.3, E:0.7)LC:1.0;";
             NewickReader n = new NewickReader();
             Tree rtree = n.Read(newick);
-            //rtree.LayoutPosition();
-            //Console.Write(rtree.Print());
+
 
 
             Tree gentree = new Tree();
             Random r = new Random();
 
-            
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 9; i++)
             {
-                gentree.AddNode(gentree.root);
-            }
-
-            foreach (Node nc in gentree.root.children)
-            {
-                for (int i = 0; i < r.Next(0,50); i++)
+                int jl = gentree.nodeList.Count;
+                for (int j = 0; j < jl; j++)
                 {
-                    gentree.AddNode(nc);
-                }
-
-                foreach (Node nd in nc.children)
-                {
-                    for (int i = 0; i < 1; i++)
+                    for (int k = 0; k < r.Next(0,4); k++)
                     {
-                        gentree.AddNode(nd);
+                        gentree.AddNode(gentree.nodeList[j]);
                     }
                 }
             }
+            
 
-            for (int i = 0; i < 40; i++)
-            {
-                gentree.AddNode(gentree.root);
-            }
-
-            foreach (Node nc in gentree.root.children)
-            {
-                for (int i = 0; i < r.Next(0, 50); i++)
-                {
-                    gentree.AddNode(nc);
-                }
-            }
-
-                gentree.LayoutPosition();
+            gentree.LayoutPosition();
             Console.Write(gentree.Print());
             }
     }

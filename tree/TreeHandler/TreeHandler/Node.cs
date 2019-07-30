@@ -34,6 +34,8 @@ namespace TreeHandler
             depth = 0;
             parent = null;
             position = new Vector4(0);
+            phi = 0;
+            theta = 0;
         }
 
         public Node(Node par)
@@ -44,14 +46,14 @@ namespace TreeHandler
             par.children.Add(this);
         }
 
-        public string Print()
+        public string Print(double range)
         {
             string returnstring = "";
             returnstring += @"{""position"":""";
 
             H3Layout h3 = new H3Layout();
 
-            returnstring += h3.GetStringCoords(position);
+            returnstring += h3.GetStringCoords(position, range);
 
             returnstring += @""",""colour"":""";
             returnstring += colour;
