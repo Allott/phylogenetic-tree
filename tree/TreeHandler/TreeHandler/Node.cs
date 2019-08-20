@@ -11,23 +11,23 @@ namespace TreeHandler
     {
 
         
-        public Node parent;
-        public List<Node> children = new List<Node>();
-        public string name;
-        public string colour = "#F41FB5";
-        public int listid = 0;
-        public double distance;
-        
-        public Vector4 position;
-        public double phi;
-        public double theta;
-        public double radius;
-        public double area;
-        public int depth;
-        public int size;
-        public Matrix4x4 m;
+        public Node parent;//parent node
+        public List<Node> children = new List<Node>();//list of child nodes
+        public string name;//nodes name
+        public string colour = "#F41FB5";//colour of the node
+        public int listid = 0;//Id in tree classes list of nodes, used for converting to JSon
+        public double distance;//distace from parent
 
-        public Node()//root
+        public Vector4 position;//poition in cartisian space
+        public Matrix4x4 cumulativeRotation;//cumulative rotation of parents
+        public double phi;//angles of placement on parent hemisphere 
+        public double theta;
+        public double radius;//radius of hemisphere
+
+        public int depth;//nodes depth in the tree
+        public int size;//number of nodes in this nodes subtree
+
+        public Node()//root node only
         {
             parent = null;
             name = "root";
@@ -36,6 +36,10 @@ namespace TreeHandler
             position = new Vector4(0);
             phi = 0;
             theta = 0;
+            cumulativeRotation = new Matrix4x4(1, 0, 0, 0,
+                                   0, 1, 0, 0,
+                                   0, 0, 1, 0,
+                                   0, 0, 0, 1);//identity matrix
         }
 
         public Node(Node par)
@@ -57,8 +61,10 @@ namespace TreeHandler
 
             returnstring += @""",""colour"":""";
             returnstring += colour;
-            returnstring += @""",""text"":""";
+            returnstring += @""",""name"":""";
             returnstring += name;
+            returnstring += @""",""distance"":""";
+            returnstring += distance;
             returnstring += @""",""parentID"":""";
             returnstring += listid;
             returnstring += @"""}";

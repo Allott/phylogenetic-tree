@@ -14,7 +14,7 @@ namespace TreeHandler
         public Tree Read(string newick)
         {
             Tree returntree = new Tree();
-            Node current = returntree.GetRoot();
+            Node current = returntree.root;
             string name = "";
             char[] newarray = newick.ToCharArray();
 
@@ -59,6 +59,7 @@ namespace TreeHandler
             else
             {
                 current.name = name;
+
             }
 
         }

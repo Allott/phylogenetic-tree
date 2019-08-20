@@ -58,6 +58,8 @@ namespace TreeHandler
             self.position.Y = (float)(p.radius * Math.Sin(self.phi) * Math.Sin(self.theta));
             self.position.Z = (float)(p.radius * Math.Cos(self.phi));
 
+
+            /*
             //rotate to parent angle
             Node c = self;
 
@@ -84,7 +86,28 @@ namespace TreeHandler
                 self.position = Vector4.Transform(self.position, r3);
 
             }
+            */
 
+            //rotate to parent angle fixed version
+            self.position = Vector4.Transform(self.position, self.parent.cumulativeRotation);
+
+
+            //set cumulative angle for child rotations
+
+            Matrix4x4 yr = new Matrix4x4(
+                (float)Math.Cos(-self.phi), 0, (float)Math.Sin(-self.phi), 0,
+                0, 1, 0, 0,
+                (float)(-1 * Math.Sin(-self.phi)), 0, (float)Math.Cos(-self.phi), 0,
+                0, 0, 0, 1);
+
+            Matrix4x4 zr = new Matrix4x4(
+                (float)Math.Cos(-self.theta), (float)(-1 * Math.Sin(-self.theta)), 0, 0,
+                (float)Math.Sin(-self.theta), (float)Math.Cos(-self.theta), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+
+            Matrix4x4 r3 = yr * zr;
+            self.cumulativeRotation = r3 * self.parent.cumulativeRotation;
 
             //move to parent position
             self.position = self.position + p.position;

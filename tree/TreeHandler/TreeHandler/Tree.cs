@@ -13,6 +13,8 @@ namespace TreeHandler
         public List<Node> nodeList = new List<Node>();
         H3Layout h3 = new H3Layout();
         string[] colours = new string[] {"#FFFFFF", "#FF0000", "#FF8700", "#FFFF00", "#49FF00", "#00FFB6", "#008BFF", "#0008FF", "#7400FF", "#FF00FB" };
+        const double anglemod1 = 1;
+        const double anglemod2 = 2;
 
         public Tree()
         {
@@ -25,11 +27,6 @@ namespace TreeHandler
             Node n = new Node(par);
             nodeList.Add(n);
             return n;
-        }
-
-        public Node GetRoot()
-        {
-            return root;
         }
 
         public string Print()
@@ -141,23 +138,23 @@ namespace TreeHandler
                     double rp = np.radius;
                     double maxPhi = 0;
 
-                    np.children[0].phi = 0;
+                    np.children[0].phi = 0;//place first node
                     np.children[0].theta = 0;
                     h3.SphereToCartisian(np.children[0]);
 
 
-                    anglePhi += h3.CalcChangePhi(rp, np.children[0].radius);
+                    anglePhi += h3.CalcChangePhi(rp, np.children[0].radius) * anglemod1;
 
                     for (int i = 1; i < np.children.Count; i++)
                     {
-                        double changeTheta = h3.CalcChangeTheta(rp, np.children[i].radius, anglePhi);
+                        double changeTheta = h3.CalcChangeTheta(rp, np.children[i].radius, anglePhi) * anglemod2;//const of 2 for adjustment
 
                         if (angleTheta + changeTheta <= Math.PI*2)
                         {
                             angleTheta += changeTheta;
-                            if (h3.CalcChangePhi(rp, np.children[i].radius) > maxPhi)
+                            if (h3.CalcChangePhi(rp, np.children[i].radius) * anglemod1 > maxPhi)
                             {
-                                maxPhi = h3.CalcChangePhi(rp, np.children[i].radius);
+                                maxPhi = h3.CalcChangePhi(rp, np.children[i].radius) * anglemod1;
                             }
                         }
                         else//reset new band
@@ -180,13 +177,6 @@ namespace TreeHandler
             {
                 n.colour = colours[n.depth%colours.Length];
             }
-        }
-
-        public double calculateAngle(double r, double w1, double w2, double m)//fix this
-        {
-            double w3 = w1 + w2;
-            w3 = w3 * Math.PI;
-            return 2 * Math.Asin(w3 / r) * m;
         }
 
     }
