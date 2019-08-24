@@ -59,7 +59,18 @@ namespace TreeHandler
 
             returnstring += h3.GetStringCoords(position, range);
 
-            returnstring += @""",""colour"":""";
+            if (name == "root" || name == "")//root and blank nodes are white
+            {
+                returnstring += @""",""colour2"":""";
+                returnstring += "#FFFFFF";
+            }
+            else
+            {
+                returnstring += @""",""colour"":""";
+                returnstring += colour;
+            }
+
+            returnstring += @""",""colour2"":""";
             returnstring += colour;
             returnstring += @""",""name"":""";
             returnstring += name;

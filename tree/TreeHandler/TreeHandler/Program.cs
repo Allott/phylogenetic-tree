@@ -22,7 +22,9 @@ namespace TreeHandler
                 Console.WriteLine("Phylogenetic Tree to H3 Json File");
                 Console.WriteLine("1. generate from newick file");
                 Console.WriteLine("2. generate testing file");
-                Console.WriteLine("3. exit");
+                Console.WriteLine("3. generate from other file type (experimental)");
+                Console.WriteLine("4. speedtest");
+                Console.WriteLine("5. exit");
 
                 switch (Console.ReadLine())
                 {
@@ -33,6 +35,12 @@ namespace TreeHandler
                         TestGenerate();
                         break;
                     case "3":
+                        GenerateOther();
+                        break;
+                    case "4":
+                        SpeedTest();
+                        break;
+                    case "5":
                         return;
                     default:
                         break;
@@ -43,12 +51,13 @@ namespace TreeHandler
         public static void NewickGenerate()
         {
             Console.Clear();
-            Console.WriteLine("enter newick file");
-            string newick = Console.ReadLine();
+            Console.WriteLine("enter newick file location");
+            string newick = System.IO.File.ReadAllText(Console.ReadLine());
             Console.Clear();
             NewickReader n = new NewickReader();
             Tree tree = n.Read(newick);
-            tree.LayoutPosition();
+            tree.root.name = "root";
+            tree.LayoutPosition2();
             Console.WriteLine(tree.Print());
             Console.ReadLine();
         }
@@ -57,32 +66,39 @@ namespace TreeHandler
         {
             Console.Clear();
             Tree gentree = new Tree();
+            Console.WriteLine("enter number of nodes in the tree generated");
+            int number = Convert.ToInt32(Console.ReadLine())-1;
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < number; i++)
             {
-                int jl = gentree.nodeList.Count;
-                for (int j = 0; j < jl; j++)
-                {
-                    for (int k = 0; k < r.Next(0, 4); k++)
-                    {
-                        gentree.AddNode(gentree.nodeList[j]);
-                    }
-                }
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                gentree.AddNode(gentree.root);
+                gentree.AddNode(gentree.nodeList[r.Next(0, gentree.nodeList.Count-1)]);
             }
 
-            foreach (Node n in gentree.nodeList)
+            for (int i = 1; i < gentree.nodeList.Count -1; i++)
             {
-                n.distance = r.Next(0, 10);
-                n.name = randomname();
+                gentree.nodeList[i].name = randomname();
+                gentree.nodeList[i].distance = r.Next(0, 100);
             }
 
-            gentree.LayoutPosition();
-            Console.Write(gentree.Print());
-            Console.ReadLine();
+            var watch = new System.Diagnostics.Stopwatch();
+
+            watch.Start();
+
+
+            gentree.LayoutPosition2();
+
+            watch.Stop();
+
+            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
+            Console.WriteLine("print? (y/n)");
+            if (Console.ReadLine() == "y")
+            {
+                Console.Clear();
+                Console.Write(gentree.Print());
+                Console.ReadLine();
+            }
+            
+            
         }
 
 
@@ -102,6 +118,76 @@ namespace TreeHandler
             s += consonant[r.Next(0, consonant.Length)];
 
             return s;
+        }
+        public static void GenerateOther()//generating from other files
+        {
+            Console.Clear();
+            Console.WriteLine("enter newick file location");
+            string newick = System.IO.File.ReadAllText(Console.ReadLine());
+            Console.Clear();
+            NewickReader n = new NewickReader();
+            Tree tree = n.Read(newick);
+
+
+            Console.WriteLine("enter assinment file location");
+            string[] lines = System.IO.File.ReadAllLines(Console.ReadLine());
+
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                lines[i] = lines[i].Replace("\t", "");
+            }
+
+            foreach (Node node in tree.nodeList)
+            {
+                if (node.name != "")
+                {
+                    node.name = lines[Convert.ToInt32(node.name)-1];
+                }
+            }
+            tree.root.name = "root";
+            tree.LayoutPosition2();
+            Console.WriteLine(tree.Print());
+            Console.ReadLine();
+        }
+
+        public static void SpeedTest()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+
+                long count = 0;
+
+                for (int j = 0; j < 10; j++)
+                {
+                    Tree gentree = new Tree();
+
+                    int f = (i * 500000) -1;
+
+                    for (int k = 0; k < f; k++)
+                    {
+                        gentree.AddNode(gentree.nodeList[r.Next(0, gentree.nodeList.Count - 1)]);
+                    }
+
+                    for (int k = 1; k < gentree.nodeList.Count - 1; k++)
+                    {
+                        gentree.nodeList[k].name = randomname();
+                        gentree.nodeList[k].distance = r.Next(0, 100);
+                    }
+
+                    var watch = new System.Diagnostics.Stopwatch();
+                    watch.Start();
+                    gentree.LayoutPosition2();
+                    watch.Stop();
+
+                    count += watch.ElapsedMilliseconds;
+                    
+                }
+
+                count = count / 10;
+                Console.WriteLine(i * (500000) + "  " + count + " ms");
+
+            }
         }
     }
 }

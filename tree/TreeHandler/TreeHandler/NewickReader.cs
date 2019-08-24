@@ -44,6 +44,7 @@ namespace TreeHandler
                         break;
                 }
             }
+            returntree.root.name = "root";
             return returntree;
         }
 
