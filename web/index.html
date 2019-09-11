@@ -3,16 +3,45 @@
   <head>
     <meta charset="utf-8">
     <title>Hello, WebVR! • A-Frame</title>
+    <link rel="stylesheet" href="/style.css">
     <meta name="description" content="Dan Testing">
     <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> <style> #myEmbeddedScene { width:600px; height:300px; } </style>
     <script src="https://unpkg.com/aframe-line-component/dist/aframe-line-component.min.js"></script><!--https://www.npmjs.com/package/aframe-line-component-->
     <script src="jsfile.js" defer></script>
     <script>
       AFRAME.registerComponent('node', {
+        schema: {
+          name: {type: 'string', default:'N/A'},
+          info: {type: 'string', default:'N/A'},
+        },
         init: function () {
           var el = this.el
-          var info = el.getAttribute("value")
-          var textbox = document.querySelector('#text-container')
+          var data = this.data
+          var namebox = document.querySelector('#text-container')
+          var infobox = document.querySelector('#text-container-info')
+          var precolour = el.getAttribute("color")
+          
+          el.addEventListener('mouseenter', function () {
+             el.setAttribute('color', '#24CAFF')
+          })
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('color', precolour)
+          })
+          el.addEventListener('click', function () {
+            el.setAttribute('color', '#00B705')
+            namebox.setAttribute('value', data.name)
+            infobox.setAttribute('value', data.info)
+          })
+        }})
+      
+      AFRAME.registerComponent('size-button', {
+        schema: {
+          s: {type: 'number', default: 0}
+        },
+        init: function () {
+          var el = this.el
+          var data = this.data
+          var world = document.querySelector('#tree-container')
           
           el.addEventListener('mouseenter', function () {
              el.setAttribute('color', '#24CAFF')
@@ -22,45 +51,9 @@
           })
           el.addEventListener('click', function () {
             el.setAttribute('color', '#00B705')
-            textbox.setAttribute('value', info)
+            world.object3D.scale.multiplyScalar(data.s)
+            world.setAttribute('position', '0 0 0')
           })
-        }})
-      
-      AFRAME.registerComponent('mode-button', {
-        init: function () {
-          var el = this.el
-          var state = true
-          var world = document.querySelector('#tree-container')
-          
-          el.addEventListener('mouseenter', function () {
-             if (state){
-               el.setAttribute('color', '#cca300')
-             } else {
-               el.setAttribute('color', '#ff9933')
-             }
-          })
-          el.addEventListener('mouseleave', function () {
-            if (state){
-              el.setAttribute('color', '#b38f00')
-            } else {
-              el.setAttribute('color', '#ff8c1a')
-            }
-            
-          })
-          el.addEventListener('click', function () {
-            if (state){
-              el.setAttribute('color', '#ff9933')
-              state = false
-              world.setAttribute('scale', '0.01 0.01 0.01')
-              world.setAttribute('position', '0 1.5 0')
-              
-            } else {
-              el.setAttribute('color', '#cca300')
-              state = true
-              world.setAttribute('scale', '1 1 1')
-              world.setAttribute('position', '0 0 0')
-            }
-            })
         }})
       
       AFRAME.registerComponent('rotate-button', {
@@ -82,44 +75,226 @@
           })
           el.addEventListener('click', function () {
             el.setAttribute('color', '#00B705')
-            world.object3D.rotation.x += Math.PI * data.xr
-            world.object3D.rotation.y += Math.PI * data.yr
-            world.object3D.rotation.z += Math.PI * data.zr
+            world.object3D.rotation.x += data.xr
+            world.object3D.rotation.y += data.yr
+            world.object3D.rotation.z += data.zr
+          })}})
+      
+      AFRAME.registerComponent('translate-button', {
+        schema: {
+          xr: {type: 'number', default: 0},
+          yr: {type: 'number', default: 0},
+          zr: {type: 'number', default: 0}
+        },
+        init: function () {
+          var el = this.el
+          var data = this.data
+          var world = document.querySelector('#tree-container')
+          
+          el.addEventListener('mouseenter', function () {
+             el.setAttribute('color', '#24CAFF')
           })
-  }
-})
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('color', '#EF2D5E')
+          })
+          el.addEventListener('click', function () {
+            el.setAttribute('color', '#00B705')
+            world.object3D.position.x += data.xr
+            world.object3D.position.y += data.yr
+            world.object3D.position.z += data.zr
+          })}})
+      
+      AFRAME.registerComponent('pre-button', {
+        schema: {
+          xr: {type: 'number', default: 0},
+          yr: {type: 'number', default: 0},
+          zr: {type: 'number', default: 0},
+          s:  {type: 'number', default: 1}
+        },
+        init: function () {
+          var el = this.el
+          var data = this.data
+          var world = document.querySelector('#tree-container')
+          
+          el.addEventListener('mouseenter', function () {
+             el.setAttribute('color', '#24CAFF')
+          })
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('color', '#EF2D5E')
+          })
+          el.addEventListener('click', function () {
+            el.setAttribute('color', '#00B705')
+            world.object3D.rotation.x = data.xr
+            world.object3D.rotation.y = data.yr
+            world.object3D.rotation.z = data.zr
+            world.setAttribute('scale', {x: data.s, y: data.s, z: data.s});
+          })}})
+      
+      AFRAME.registerComponent('tab-button', {
+        schema: {
+          tab: {type: 'string', default: ''}
+      },
+      init: function () {
+        var el = this.el
+        var data = this.data
+        el.addEventListener('mouseenter', function () {
+             el.setAttribute('color', '#24CAFF')
+          })
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('color', '#EF2D5E')
+          })
+          el.addEventListener('click', function () {
+            el.setAttribute('color', '#00B705')
+            document.querySelector("#tab1").setAttribute("visible",false)
+            document.querySelector("#tab2").setAttribute("visible",false)
+            document.querySelector("#tab3").setAttribute("visible",false)
+            document.querySelector("#tabI").setAttribute("visible",false)
+            document.querySelector(data.tab).setAttribute("visible",true)
+          })}})
       
     </script>
   </head>
   <body>
-    <button type="button" onclick="toggle()" id="button">Unused</button>
-    <textarea rows="3" cols="10" id="input"></textarea>
+    
+    <div align="center">
+      <button class="block" onclick="toggle()" id="button">Load</button>
+      <select class="middle" id="selectMenu">
+        <option value="test">Demo</option>
+        <option value="bees">An integrative taxonomic approach to assess the status of Corsican bumblebees - Corsican_bumblebees_EF1A_Alignment</option>
+        <option value="frogs">New World direct-developing frogs (Anura: Terrarana) - Tb9065</option>
+        <option value="dengue">Dengue diversity across spatial and temporal scales - Dengue_virus_type_1</option>
+        <option value="200-nodes">Node Limit Test: 200nx</option>
+        <option value="400-nodes">Node Limit Test: 400nx</option>
+        <option value="600-nodes">Node Limit Test: 600x</option>
+        <option value="800-nodes">Node Limit Test: 800x</option>
+        <option value="1000-nodes">Node Limit Test: 1000x</option>
+        <option value="1200-nodes">Node Limit Test: 1200x</option>
+
+      </select>
+    </div>
+    
+    
+    
+    <div align = "center">
       <div id="myEmbeddedScene">
         <a-scene background="color: #190049" embedded>
           
-          <a-entity id="camera-container" rotation="0 -90 0">
-            <a-camera>
+          <a-entity id="camera-container" rotation="0 0 0" position="1 -2 0">
+            <a-camera id="interface-transform">
               <a-cursor></a-cursor>
             </a-camera>
-          <a-entity vive-focus-controls laser-controls></a-entity>
+            <a-entity vive-focus-controls laser-controls></a-entity>
+          </a-entity>
+          
+          
+          <a-entity id="floor-container" >
+            <a-box position="0 -2 0" rotation="0 0 0" material="color: #b3b3b3; transparent: true; opacity: 0.5" width="4" depth="4" shadow></a-box>
           </a-entity>
 
-          <a-entity id="interface-container">
-            <a-text id="text-container" value="nothing selected" position="1 1.5 0" rotation="0 270 0" width="2" color="black"></a-text>
-            <a-box position="0 0.3 0" rotation="0 0 0" material="color: #b3b3b3; transparent: true; opacity: 0.5" width="2" depth="2" shadow></a-box>
-            <a-box position="1.05 0.3 0" rotation="0 0 0" material="color: #b3b3b3; transparent: true; opacity: 0.5"width="0.1" depth="2" height="3" shadow></a-box>
-            <a-box position="1 1.5 -0.3" rotation="0 0 0" color="#b38f00" width="0.1" depth="0.1" height="0.1" shadow mode-button></a-box>
-            <a-entity id="rotation-button-container" position="1 1.3 -0.6">
-              <a-box position="0 0 0.1" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="yr: 0.02"></a-box>
-              <a-box position="0 0 -0.1" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="yr: -0.02"></a-box>
-              <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="zr: 0.02"></a-box>
-              <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="zr: -0.02"></a-box>
+          <a-entity id="interface-container" position="0.6 -0.3 0.4">
+            <a-entity position="0.4 -0.2 -0.7" rotation="0 90 0" scale="0.2 0.2 0.2">
+              
+              <a-entity id="tab buttons" position="0.04 1 0.1">
+                <a-box position="0 0 -0.9" color="#EF2D5E" width="0.2" depth="0.2" height="0.15" shadow tab-button="tab: #tab1"></a-box>
+                <a-box position="0 0 -0.6" color="#EF2D5E" width="0.2" depth="0.2" height="0.15" shadow tab-button="tab: #tab2"></a-box>
+                <a-box position="0 0 -0.3" color="#EF2D5E" width="0.2" depth="0.2" height="0.15" shadow tab-button="tab: #tab3"></a-box>
+              </a-entity>
+              
+              <a-entity id="tabI">
+                <a-text value="Getting started" position="-0.1 0.7 -0.8" rotation="0 270 0" width="2.5" color="black"></a-text>
+                <a-image src="https://cdn.glitch.com/28fd2942-0b10-4ce5-a386-779de3a62a81%2Finterface.png?v=1566142228671" position="-0 0 0" rotation="0 270 0"></a-image>
+                <a-text value="Navigate this interface with the pink tab buttons" position="-0.1 -0.7 -0.8" rotation="0 270 0" width="1.5" color="black"></a-text>
+              </a-entity>
+              
+              
+              <a-entity id="tab1"  visible="false">
+                <a-box position="0 1 -0.8" color="#f5c842" width="0.05" depth="0.25" height="0.20" shadow></a-box>
+                <a-text value="Scene Transformation" position="-0.1 0.7 -0.8" rotation="0 270 0" width="2.5" color="black"></a-text>
+                <a-text value="Rotation" position="-0.1 0.22 -0.7" rotation="0 270 0" width="2" color="black"></a-text>
+                <a-text value="Translation" position="-0.1 0.22 0.3" rotation="0 270 0" width="2" color="black"></a-text>
+                
+                <a-entity id="rotation-button-container-x" position="-0.04 -0.4 -0.8" >
+                  <a-text value="X" position="-0 0.45 -0.05" rotation="0 270 0" width="2" color="black"></a-text>
+                  <a-text value="<<     <     >     >>" position="-0 -0.3 -0.12" rotation="0 270 90" width="2" color="black"></a-text>
+                  
+                  <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="xr: 0.1"></a-box>
+                  <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="xr: -0.1"></a-box>
+                  <a-box position="0 0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow rotate-button="xr: 1"></a-box>
+                  <a-box position="0 -0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow rotate-button="xr: -1"></a-box>
+                </a-entity>
+                
+                
+                <a-entity id="rotation-button-container-y" position="-0.04 -0.4 -0.5">
+                  <a-text value="Y" position="-0 0.45 -0.05" rotation="0 270 0" width="2" color="black"></a-text>
+                  <a-text value="<<     <     >     >>" position="-0 -0.3 -0.12" rotation="0 270 90" width="2" color="black"></a-text>
+                  
+                  <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="yr: 0.1"></a-box>
+                  <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="yr: -0.1"></a-box>
+                  <a-box position="0 0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow rotate-button="yr: 1"></a-box>
+                  <a-box position="0 -0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow rotate-button="yr: -1"></a-box>
+                </a-entity>
+                
+                <a-entity id="rotation-button-container-z" position="-0.04 -0.4 -0.2">
+                  <a-text value="Z" position="-0 0.45 -0.05" rotation="0 270 0" width="2" color="black"></a-text>
+                  <a-text value="<<     <     >     >>" position="-0 -0.3 -0.12" rotation="0 270 90" width="2" color="black"></a-text>
+                  
+                  <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="zr: 0.1"></a-box>
+                  <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow rotate-button="zr: -0.1"></a-box>
+                  <a-box position="0 0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow rotate-button="zr: 1"></a-box>
+                  <a-box position="0 -0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow rotate-button="zr: -1"></a-box>
+                </a-entity>
+                
+                <a-entity id="size-button-container" position="-0.04 0.35 -0.5" rotation="90 0 0">
+                  <a-text value="Scale" position="-0 -0.25 -0.2" rotation="0 270 90" width="2" color="black"></a-text>
+                  <a-text value="--      -        +      ++" position="-0 -0.3 -0.12" rotation="0 270 90" width="2" color="black"></a-text>
+                  
+                  <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow size-button="s: 1.25"></a-box>
+                  <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow size-button="s: 0.8"></a-box>
+                  <a-box position="0 0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow size-button="s: 5"></a-box>
+                  <a-box position="0 -0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow size-button="s: 0.2"></a-box>
+                </a-entity>
+                
+                <a-entity id="translation-button-container-y" position="-0.04 -0.4 0.5">
+                  <a-text value="Y" position="-0 0.45 -0.05" rotation="0 270 0" width="2" color="black"></a-text>
+                  <a-text value="<<     <     >     >>" position="-0 -0.3 -0.12" rotation="0 270 90" width="2" color="black"></a-text>
+                  
+                  <a-box position="0 0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow translate-button="yr: 0.1"></a-box>
+                  <a-box position="0 -0.1 0" rotation="0 0 0" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow translate-button="yr: -0.1"></a-box>
+                  <a-box position="0 0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow translate-button="yr: 1"></a-box>
+                  <a-box position="0 -0.3 0" rotation="0 0 0" color="#EF2D5E" width="0.12" depth="0.12" height="0.12" shadow translate-button="yr: -1"></a-box>
+                </a-entity>
+                
+              </a-entity>
+              
+              <a-entity id="tab2" visible="false">
+                <a-box position="0 1 -0.5" color="#f5c842" width="0.05" depth="0.25" height="0.20" shadow></a-box>
+                <a-text value="Preset Transformations" position="-0.1 0.7 -0.8" rotation="0 270 0" width="2.5" color="black"></a-text>
+                
+                <a-box position="0 0.5 -0.8" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow pre-button=""></a-box>
+                <a-text value="Default" position="-0.1 0.5 -0.6" rotation="0 270 0" width="2" color="black"></a-text>
+                
+                <a-box position="0 0.3 -0.8" color="#EF2D5E" width="0.1" depth="0.1" height="0.1" shadow pre-button="s: 0.04; xr: -1.57"></a-box>
+                <a-text value="Tree" position="-0.1 0.3 -0.6" rotation="0 270 0" width="2" color="black"></a-text>
+              </a-entity>
+              
+              <a-entity id="tab3" visible="false">
+                <a-box position="0 1 -0.2" color="#f5c842" width="0.05" depth="0.25" height="0.20" shadow></a-box>
+                <a-text value="Node information" position="-0.1 0.7 -0.8" rotation="0 270 0" width="2.5" color="black"></a-text>
+                <a-text id="text-container-info" value="nothing selected" position="-0.1 0.5 -0.4" rotation="0 270 0" width="2" color="#136301"></a-text>
+                <a-text value="Distance:" position="-0.1 0.5 -0.8" rotation="0 270 0" width="2" color="black"></a-text>
+              </a-entity>
+              
+              <a-text id="text-container" value="nothing selected" position="-0.1 0.85 0" rotation="0 270 0" width="1.5" color="#136301"></a-text>
+              
+              <a-box position="0.04 0 0" rotation="0 0 0" material="color: #b3b3b3; transparent: true; opacity: 0.5"width="0.1" depth="2" height="2"></a-box>
             </a-entity>
           </a-entity>
           
-          <a-entity id="tree-container"></a-entity>
+          <a-entity id="tree-container" scale="0.04 0.04 0.04" rotation="-90 0 0"></a-entity>
           
         </a-scene>
       </div>
+          
+    </div>
   </body>
 </html>
