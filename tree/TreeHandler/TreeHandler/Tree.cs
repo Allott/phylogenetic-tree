@@ -119,7 +119,7 @@ namespace TreeHandler
         {
             if (n.children.Count != 0)
             {
-                n.children = n.children.OrderByDescending(x => x.radius).ToList();
+                n.children = n.children.OrderByDescending(x => x.size).ToList();
 
 
                 double anglePhi = 0; // hemishpere angle

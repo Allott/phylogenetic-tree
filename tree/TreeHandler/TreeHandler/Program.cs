@@ -42,6 +42,9 @@ namespace TreeHandler
                         break;
                     case "5":
                         return;
+                    case "6":
+                        DemoGenerate();
+                        break;
                     default:
                         break;
                 }
@@ -188,6 +191,62 @@ namespace TreeHandler
                 Console.WriteLine(i * (500000) + "  " + count + " ms");
 
             }
+        }
+
+        public static void DemoGenerate()
+        {
+            Console.Clear();
+            Tree gentree = new Tree();
+            Console.WriteLine("enter number of nodes in the tree generated");
+            int number = Convert.ToInt32(Console.ReadLine()) - 1;
+            int number2 = Convert.ToInt32(Console.ReadLine()) - 1;
+            int number3 = Convert.ToInt32(Console.ReadLine()) - 1;
+
+            for (int i = 0; i < number; i++)
+            {
+                gentree.AddNode(gentree.root);
+            }
+
+
+            for (int i = 0; i < number3; i++)
+            {
+                int k = gentree.nodeList.Count;
+
+                for (int j = 0; j < k; j++)
+                {
+                    for (int l = 0; l < number2; l++)
+                    {
+                        gentree.AddNode(gentree.nodeList[j]);
+                    }
+                }
+
+            }
+
+            for (int i = 1; i < gentree.nodeList.Count - 1; i++)
+            {
+                gentree.nodeList[i].name = randomname();
+                gentree.nodeList[i].distance = r.Next(0, 100);
+            }
+
+            var watch = new System.Diagnostics.Stopwatch();
+
+            watch.Start();
+
+
+            gentree.LayoutPosition2();
+
+            watch.Stop();
+
+            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
+            Console.WriteLine("print? (y/n)");
+            if (Console.ReadLine() == "y")
+            {
+                Console.Clear();
+                Console.Write(gentree.Print());
+                Console.ReadLine();
+            }
+
+
         }
     }
 }
