@@ -1,0 +1,16 @@
+.block {
+  width: 90%;
+  background-color: #b8dfff;
+  padding: 12px 28px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.middle {
+  width: 80%;
+  align: center;
+  background-color: #b8dfff;
+  padding: 12px 28px;
+  font-size: 16px;
+  text-align: center;
+}
