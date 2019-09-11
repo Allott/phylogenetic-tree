@@ -78,62 +78,11 @@ namespace TreeHandler
             return returnstring;
         }
 
-        public void LayoutPosition()
-        {
-            SortByDepth();
-            BottomUpPass();
-            SortBySize();
-            TopDownPass();
-            ColourByDepth();
-        }
-
-        public void LayoutPosition2()
+        public void LayoutPosition2()//2 because it was the second version, original was removed
         {
             BottomUpPass2(root);
-            //SortBySize();
             TopDownPass2(root);
             ColourByDepth();
-        }
-
-        public void SortByDepth()//sort list by depth for Bottom Up and Top Down Passes
-        {
-            nodeList = nodeList.OrderBy(x => x.depth).ToList();
-        }
-
-        public void SortBySize()//sort child lists by their sizes
-        {
-            foreach (Node n in nodeList)
-            {
-                n.children = n.children.OrderByDescending(x => x.size).ToList();
-            }
-        }
-
-
-        public void BottomUpPass()//find an approximate radius for each hemisphere
-        {
-            for (int i = nodeList.Count - 1; i > -1; i--)//messy
-            {
-                if (nodeList[i].children.Count == 0)//leaf node
-                {
-                    nodeList[i].radius = h3.CalcRadius(0.0025);
-                }
-                else
-                {
-                    double r = 0;
-                    int s = 0;
-                    foreach (Node n in nodeList[i].children)
-                    {
-                        r += 7.2 * h3.CalcHArea(n.radius);//why 7.2?
-                        s += 1;
-                        if (n.children.Count != 0)
-                        {
-                            s += n.size;
-                        }
-                    }
-                    nodeList[i].radius = h3.CalcRadius(r);
-                    nodeList[i].size = s;
-                }
-            }
         }
 
         public void BottomUpPass2(Node n)//find an approximate radius for each hemisphere
@@ -165,50 +114,6 @@ namespace TreeHandler
             
         }
 
-
-        public void TopDownPass()//place children on the surface of their parent hemisphere
-        {
-            foreach (Node np in nodeList)
-            {
-                if (np.children.Count != 0)
-                {
-                    double anglePhi = 0; // hemishpere angle
-                    double angleTheta = 0; //rotation angle
-                    double rp = np.radius;
-                    double maxPhi = 0;
-
-                    np.children[0].phi = 0;//place first node
-                    np.children[0].theta = 0;
-                    h3.SphereToCartisian(np.children[0]);
-
-
-                    anglePhi += h3.CalcChangePhi(rp, np.children[0].radius) * anglemod1;
-
-                    for (int i = 1; i < np.children.Count; i++)
-                    {
-                        double changeTheta = h3.CalcChangeTheta(rp, np.children[i].radius, anglePhi) * anglemod2;//const of 2 for adjustment
-
-                        if (angleTheta + changeTheta <= Math.PI*2)
-                        {
-                            angleTheta += changeTheta;
-                            if (h3.CalcChangePhi(rp, np.children[i].radius) * anglemod1 > maxPhi)
-                            {
-                                maxPhi = h3.CalcChangePhi(rp, np.children[i].radius) * anglemod1;
-                            }
-                        }
-                        else//reset new band
-                        {
-                            angleTheta = changeTheta;
-                            anglePhi += maxPhi;
-                        }
-
-                        np.children[i].phi = anglePhi;
-                        np.children[i].theta = angleTheta;
-                        h3.SphereToCartisian(np.children[i]);
-                    }
-                }
-            }
-        }
 
         public void TopDownPass2(Node n)//place children on the surface of their parent hemisphere
         {

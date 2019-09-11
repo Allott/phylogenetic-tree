@@ -23,7 +23,7 @@ namespace TreeHandler
             return p.X*(100/r) + " " + p.Y*(100/r) + " " + (p.Z-(r/2))*(100/r);//1000 so node are drawn with sufficient distance between
         }
 
-        public double CalcRadius(double i)//check this
+        public double CalcRadius(double i)
         {
             double x = Math.Sqrt(i / (2 * Math.PI * k * k));
 
@@ -33,7 +33,7 @@ namespace TreeHandler
 
         public double CalcHArea(double i)
         {
-            double beta = 1.00;//?
+            double beta = 1.0;
             return 2 * Math.PI * (Math.Cosh(i / k) - 1.0) * beta;
         }
 
@@ -58,35 +58,6 @@ namespace TreeHandler
             self.position.Y = (float)(p.radius * Math.Sin(self.phi) * Math.Sin(self.theta));
             self.position.Z = (float)(p.radius * Math.Cos(self.phi));
 
-
-            /*
-            //rotate to parent angle
-            Node c = self;
-
-
-            for (int i = 0; i < self.depth; i++)//multi parent rotation bug fix, needs changing for efficiency
-            {
-                c = c.parent;
-
-                Matrix4x4 yr = new Matrix4x4(
-                (float)Math.Cos(-c.phi), 0, (float)Math.Sin(-c.phi), 0,
-                0, 1, 0, 0,
-                (float)(-1 * Math.Sin(-c.phi)), 0, (float)Math.Cos(-c.phi), 0,
-                0, 0, 0, 1
-                );
-
-                Matrix4x4 zr = new Matrix4x4(
-                    (float)Math.Cos(-c.theta), (float)(-1 * Math.Sin(-c.theta)), 0, 0,
-                    (float)Math.Sin(-c.theta), (float)Math.Cos(-c.theta), 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1
-                    );
-                Matrix4x4 r3 = yr * zr;
-
-                self.position = Vector4.Transform(self.position, r3);
-
-            }
-            */
 
             //rotate to parent angle fixed version
             self.position = Vector4.Transform(self.position, self.parent.cumulativeRotation);

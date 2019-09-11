@@ -1,0 +1,46 @@
+#NEXUS
+
+[!This data set was downloaded from TreeBASE, a relational database of phylogenetic knowledge. TreeBASE has been supported by the NSF, Harvard University, Yale University, SDSC and UC Davis. Please do not remove this acknowledgment from the Nexus file.
+
+
+Generated on September 02, 2019; 10:17 GMT
+
+TreeBASE (cc) 1994-2008
+
+Study reference:
+Reblova M., Reblova K., & Stepanek V. 2015. Molecular systematics of Barbatosphaeria
+(Sordariomycetes): multigene phylogeny and secondary ITS structure. Persoonia:
+Molecular Phylogeny and Evolution of Fungi, 35: 21-38.
+
+TreeBASE Study URI:  http://purl.org/phylo/treebase/phylows/study/TB2:S16315]
+
+BEGIN TAXA;
+        TITLE  Untitled_Block_of_Taxa;
+        DIMENSIONS NTAX=15;
+        TAXLABELS
+            Barbatosphaeria_arboricola_CBS114120
+            Barbatosphaeria_arboricola_CBS127689
+            Barbatosphaeria_arboricola_CBS127690
+            Barbatosphaeria_barbirostris_CBS121149
+            Barbatosphaeria_barbirostris_MR3767
+            Barbatosphaeria_dryina_CBS127691
+            Barbatosphaeria_dryina_CBS137796
+            Barbatosphaeria_dryina_CBS137798
+            Barbatosphaeria_fimbriata_MR3694
+            Barbatosphaeria_hippocrepida_ICMP17630
+            Barbatosphaeria_neglecta_CBS127693
+            Barbatosphaeria_sp_MR3730
+            Barbatosphaeria_varioseptata_CBS137797
+            Natantiella_ligneola_CBS123410
+            Natantiella_ligneola_CBS123470
+            ;
+END;
+
+BEGIN TREES;
+      TITLE 'Barbatosphaeria Fig 2 its-beta-tubulin';
+      LINK TAXA = Untitled_Block_of_Taxa;
+      TREE Fig._2 = [&R] (((((((((Barbatosphaeria_arboricola_CBS127690:0.0014683369954176918,Barbatosphaeria_arboricola_CBS114120:1.66654827338568E-6):0.0031086734829202235,Barbatosphaeria_arboricola_CBS127689:0.007425134421692521):0.008714114122546569,Barbatosphaeria_sp_MR3730:0.019709524322768818):0.005341864768688684,Barbatosphaeria_varioseptata_CBS137797:0.01894497401846285):0.02019534749779865,(Barbatosphaeria_barbirostris_CBS121149:1.66654827338568E-6,Barbatosphaeria_barbirostris_MR3767:1.66654827338568E-6):0.04310778908396954):0.006594956627681703,((Barbatosphaeria_dryina_CBS127691:0.0013408544497047524,Barbatosphaeria_dryina_CBS137796:1.66654827338568E-6):1.66654827338568E-6,Barbatosphaeria_dryina_CBS137798:1.66654827338568E-6):0.042142998551008816):0.02574331979114367,Barbatosphaeria_hippocrepida_ICMP17630:0.1182436318042791):0.01358873020789527,(Barbatosphaeria_neglecta_CBS127693:0.02943206323327933,Barbatosphaeria_fimbriata_MR3694:0.015568198475269327):0.007394825398932475):0.14639053079483702,(Natantiella_ligneola_CBS123410:0.0018654015816211595,Natantiella_ligneola_CBS123470:1.66654827338568E-6):0.14639053079483702);
+[!  TreeBASE tree URI: http://purl.org/phylo/treebase/phylows/tree/TB2:Tr77297]
+
+
+END;
